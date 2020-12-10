@@ -1,5 +1,10 @@
-Rust library for Magnetite, which in turn are Rust bindings for Obsidian.md.
+# Magnetite Rust Library (magnetite-lib)
 
-This library defines a Rust traits, structs and impls that
-aim to replicate, as much as possible, the Typescript API for Obsidian.
+Library for building plugins in pure Rust for [Obsidian.md](https://obsidian.md/).
 
+This library defines Rust traits, structs and impls that
+aim to replicate, as much as possible, the Typescript API for Obsidian plugin development.
+
+It's intended to be used in conjunction with (a fork of?) [magnetite-host](https://github.com/elmarsto/magnetite-host/) and (almost certainly a fork of) [magnetite-guest](https://github.com/elmarsto/magnetite-guest/).
+
+The Obsidian Plugin API is in early alpha, and thus, so is this! Subject to change without notice.
