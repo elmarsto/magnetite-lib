@@ -7,4 +7,4 @@ aim to replicate, as much as possible, [the Typescript API](https://github.com/o
 
 It's intended to be used in conjunction with (a fork of?) [magnetite-host](https://github.com/elmarsto/magnetite-host/) and (almost certainly a fork of) [magnetite-guest](https://github.com/elmarsto/magnetite-guest/).
 
-The Obsidian Plugin API is in early alpha, and thus, so is this! Subject to change without notice.
+The Obsidian Plugin API is in early alpha, and thus, so is this!
