@@ -1,0 +1,10 @@
+[package]
+name = "magnetite-lib"
+version = "0.1.0"
+authors = ["Elizabeth Marston <liz.mars@pm.me>"]
+edition = "2018"
+
+[dependencies]
+js-sys = "0.3.46"
+web-sys = "0.3.46"
+
