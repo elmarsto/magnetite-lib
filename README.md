@@ -1,6 +1,6 @@
 # Magnetite Rust Library (magnetite-lib)
 
-Library for building plugins in pure Rust for [Obsidian.md](https://obsidian.md/).
+Library for building plugins in Rust for [Obsidian.md](https://obsidian.md/).
 
 This library defines Rust traits, structs and impls that
 aim to replicate, as much as possible, the Typescript API for Obsidian plugin development.
