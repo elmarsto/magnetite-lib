@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
-use js_sys::*;
-use web_sys::*;
+use js_sys::{ JsString };
+use web_sys::{ HtmlElement };
 
 #[wasm_bindgen]
 extern "C" {
@@ -12,30 +12,15 @@ extern "C" {
     pub type EventRef;
     pub type Events;
     #[wasm_bindgen(method)]
-    fn on(this: &Events) -> EventRef;
+    pub fn on(this: &Events, eventName: &JsString) -> EventRef;
     #[wasm_bindgen(extends = Component)]
     pub type Plugin;
     #[wasm_bindgen(method, js_name = "addStatusBarItem")]
-    fn add_status_bar_item(this: &Plugin) -> HtmlElement;
-    #[wasm_bindgen(method)] // keep camelCased names where we wrap below for native rust strings
-    fn addRibbonIcon(this: &Plugin, icon: &JsString, title: &JsString) -> HtmlElement;
+    pub fn add_status_bar_item(this: &Plugin) -> HtmlElement;
+    #[wasm_bindgen(method, js_class = "Plugin", js_name = "addRibbonIcon")]
+    pub fn add_ribbon_icon(this: &Plugin, icon: &JsString, title: &JsString) -> web_sys::HtmlElement;
     #[wasm_bindgen(extends = Events)]
     pub type Vault;
-}
-
-impl Plugin {
-    pub fn vault(&self) -> Vault {
-        Vault::from(Reflect::get(self,&JsValue::from("vault"))
-          .expect("it returns the vault object"))
-    }
-    pub fn app(&self) -> App {
-        App::from(Reflect::get(self,&JsValue::from("app")).expect("it returns the app object"))
-    }
-    // convention: keep camelCase on JS function or method when we are wrapping it
-    // to convert between native rust strings and JsString
-    pub fn add_ribbon_icon(&self, icon: &str, title: &str) {
-        self.addRibbonIcon(&JsString::from(icon), &JsString::from(title));
-    }
 }
 
 #[cfg(test)]
