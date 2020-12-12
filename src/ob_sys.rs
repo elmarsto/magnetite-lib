@@ -1,48 +1,48 @@
 use wasm_bindgen::prelude::*;
-use js_sys::{ JsString, Promise, Object, Array };
+use js_sys::{ Promise, Object, Array };
 use web_sys::{ HtmlElement };
 
 // low-level APIs (plumbing, not porcelain; intentionally brutalist)
-
+// note we preserve camelCase here; contextual cue that you're dealing with import
 #[wasm_bindgen]
 extern "C" {
-    #[wasm_bindgen(js_name = Events)]
-    pub type events;
+    #[wasm_bindgen()]
+    pub type Events;
     #[wasm_bindgen(method, js_class = "Events")]
-    pub fn on(events: &events, eventName: &JsString);
+    pub fn Events_on(events: &Events, eventName: &str);
 
-    #[wasm_bindgen(js_name = App, extends = events)]
-    pub type app;
+    #[wasm_bindgen(extends = Events)]
+    pub type App;
 
-    #[wasm_bindgen(js_name = Component, extends = events)]
-    pub type component;
+    #[wasm_bindgen(js_name = Component, extends = Events)]
+    pub type Component;
     #[wasm_bindgen(method, js_class = "Component", js_name = load)]
-    pub fn component_load(this: &component);
+    pub fn Component_load(this: &Component);
     #[wasm_bindgen(method, js_class = "Component", js_name = unload)]
-    pub fn component_unload(this: &component);
+    pub fn Component_unload(this: &Component);
     #[wasm_bindgen(method, js_class = "Component", js_name = addChild)]
-    pub fn component_add_child(this: &component, child: &component);
+    pub fn Component_addChild(this: &Component, child: &Component);
     #[wasm_bindgen(method, js_class = "Component", js_name = removeChild)]
-    pub fn component_remove_child(this: &component, child: &component) -> bool;
+    pub fn Component_removeChild(this: &Component, child: &Component) -> bool;
 
-    #[wasm_bindgen(js_name = Plugin, extends = component, extends = events)]
-    pub type plugin;
+    #[wasm_bindgen(extends = Component, extends = Events)]
+    pub type Plugin;
     #[wasm_bindgen(method, js_class = "Plugin", js_name = addRibbonIcon)]
-    pub fn plugin_add_ribbon_icon(this: &plugin, icon: &JsString, title: &JsString) -> HtmlElement;
+    pub fn Plugin_addRibbonIcon(this: &Plugin, icon: &str, title: &str) -> HtmlElement;
     #[wasm_bindgen(method, js_class = "Plugin", js_name = addStatusBarItem)]
-    pub fn plugin_add_status_bar_item(this: &plugin) -> HtmlElement;
+    pub fn Plugin_addStatusBarItem(this: &Plugin) -> HtmlElement;
     #[wasm_bindgen(method, js_class = "Plugin", js_name = addCommand)]
-    pub fn plugin_add_command(this: &plugin, command: &Object);
+    pub fn Plugin_addCommand(this: &Plugin, command: &Object);
     #[wasm_bindgen(method, js_class = "Plugin", js_name = addSettingTab)]
-    pub fn plugin_add_setting_tab(this: &plugin, setting_tab: &Object);
+    pub fn Plugin_addSettingTab(this: &Plugin, setting_tab: &Object);
     #[wasm_bindgen(method, js_class = "Plugin", js_name = registerView)]
-    pub fn plugin_register_view(this: &plugin, view_creator: &Object);
+    pub fn Plugin_registerView(this: &Plugin, view_creator: &Object);
     #[wasm_bindgen(method, js_class = "Plugin", js_name = registerExtensions)]
-    pub fn plugin_register_extensions(this: &plugin, extensions: &Array, viewType: &JsString);
+    pub fn Plugin_registerExtensions(this: &Plugin, extensions: &Array, viewType: &str);
     #[wasm_bindgen(method, js_class = "Plugin", js_name = registerExtensions)]
-    pub fn plugin_load_data(this: &plugin) -> Promise;
-    pub fn plugin_save_data(this: &plugin, data: JsValue) -> Promise;
+    pub fn Plugin_loadData(this: &Plugin) -> Promise;
+    pub fn Plugin_saveData(this: &Plugin, data: JsValue) -> Promise;
 
-    #[wasm_bindgen(extends = events)]
-    pub type vault;
+    #[wasm_bindgen(extends = Events)]
+    pub type Vault;
 }

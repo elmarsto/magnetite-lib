@@ -1,5 +1,5 @@
 [package]
-name = "magnetite-lib"
+name = "magnetite_lib"
 version = "0.0.1"
 authors = ["Elizabeth Marston <liz.mars@pm.me>"]
 edition = "2018"
