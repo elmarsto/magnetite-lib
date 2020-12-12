@@ -481,6 +481,13 @@ extern "C" {
     pub fn ItemView_onMoreOptionsMenu(this: &ItemView, menu: &Menu);
 
 
+    #[wasm_bindgen(js_namespace = MarkdownPreviewRenderer, js_name = registerPostProcessor)]
+    pub fn MarkdownPreviewRenderer_registerPostProcessor(postProcessor: &MarkdownPostProcessor);
+
+    #[wasm_bindgen(js_namespace = MarkdownPreviewRenderer, js_name = unregisterPostProcessor)]
+    pub fn MarkdownPreviewRenderer_unregisterPostProcessor(postProcessor: &MarkdownPostProcessor);
+
+    
     #[wasm_bindgen(method, js_class = "Plugin", js_name = addCommand)]
     pub fn Plugin_addCommand(this: &Plugin, command: &Command);
 
@@ -504,6 +511,17 @@ extern "C" {
 
     #[wasm_bindgen(method, js_class = "Plugin", js_name = saveData)]
     pub fn Plugin_saveData(this: &Plugin, data: &Object) -> Promise;
+
+
+    #[wasm_bindgen(method, js_class = "PluginSettingTab", js_name = load)]
+    pub fn PluginSettingTab_load(this: &PluginSettingTab);
+
+
+    #[wasm_bindgen(method, js_class = "Scope", js_name = registerKey)]
+    pub fn Scope_registerKey(this: &Scope, modifiers: &Array, key: &str, func: &Function) -> Function;
+
+    #[wasm_bindgen(method, js_class = "Scope", js_name = unregister)]
+    pub fn Scope_unregister(this: &Scope, handler: &Function);
 
 
     #[wasm_bindgen(method, js_class = "Vault", js_name = delete)]
