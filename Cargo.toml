@@ -20,6 +20,7 @@ features = [
   "WebSocket",
   "CanvasRenderingContext2d",
   "Document",
+  "DocumentFragment",
   "Element",
   "Headers",
   "HtmlCanvasElement",

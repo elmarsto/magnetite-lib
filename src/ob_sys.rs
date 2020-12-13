@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 use js_sys::{ Promise, Object, Array, ArrayBuffer, Function };
-use web_sys::{ HtmlElement };
+use web_sys::{ HtmlElement, DocumentFragment };
 
 // low-level APIs (plumbing, not porcelain; intentionally brutalist; eventually I want this file autogenned)
 // note we preserve camelCase here; contextual cue that you're dealing with import
@@ -9,16 +9,16 @@ use web_sys::{ HtmlElement };
 #[wasm_bindgen]
 extern "C" {
     /* Classes */
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen(extends = ValueComponent, extends = BaseComponent, extends = Object)]
     pub type AbstractTextComponent;
 
-    #[wasm_bindgen(extends = Events)]
+    #[wasm_bindgen(extends = Events, extends = Object)]
     pub type App;
 
     #[wasm_bindgen(extends = Object)]
     pub type BaseComponent;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type BlockCache;
 
     #[wasm_bindgen(extends = SubpathResult)]
@@ -36,7 +36,7 @@ extern "C" {
     #[wasm_bindgen(js_name = Component, extends = Events)]
     pub type Component;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type DataAdapter;
 
     #[wasm_bindgen(extends = ValueComponent)]
@@ -54,58 +54,61 @@ extern "C" {
     #[wasm_bindgen(extends = Object)]
     pub type EventRef;
 
-    #[wasm_bindgen(extends = BaseComponent)]
+    #[wasm_bindgen(extends = BaseComponent, extends = Object)]
     pub type ExtraButtonComponent;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type FileStats;
 
     #[wasm_bindgen(extends = DataAdapter)] // recall typescript interfaces are treated kinda like JS objects by bindgen
     pub type FileSystemAdapter;
 
-    #[wasm_bindgen(extends = ItemView)]
+    #[wasm_bindgen(extends = ItemView, extends = View, extends = Component, extends = Events, extends = Object)]
     pub type FileView;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type FrontMatterCache;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type HeadingCache;
 
     #[wasm_bindgen(extends = SubpathResult)]
     pub type HeadingSubpathResult;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
+    pub type Hotkey;
+
+    #[wasm_bindgen]
     pub type HoverParent;
 
-    #[wasm_bindgen(extends = Component)]
+    #[wasm_bindgen(extends = Component, extends = Events, extends = Object)]
     pub type HoverPopover;
 
-    #[wasm_bindgen(extends = View)]
+    #[wasm_bindgen(extends = View, extends = Component, extends = Events, extends = Object)]
     pub type ItemView;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type KeymapEventHandler;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen(extends = Function, extends = Object)]
     pub type KeymapEventListener;
 
     #[wasm_bindgen(extends = ReferenceCache)]
     pub type LinkCache;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type ListedFiles;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type Loc;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen(extends = Function, extends = Object)]
     pub type MarkdownPostProcessor;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type MarkdownPostProcessorContext;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type MarkdownPreviewEvents;
 
     #[wasm_bindgen(extends = Object)]
@@ -114,31 +117,40 @@ extern "C" {
     #[wasm_bindgen(extends = MarkdownRenderer, extends = MarkdownSubView, extends = MarkdownPreviewEvents)]
     pub type MarkdownPreviewView;
 
-    #[wasm_bindgen(extends = Component, extends = MarkdownPreviewEvents, extends = HoverParent)]
+    #[wasm_bindgen(extends = Component, extends = Events, extends = MarkdownPreviewEvents, extends = HoverParent, extends = Object)]
     pub type MarkdownRenderer;
 
-    #[wasm_bindgen(extends = MarkdownSubView, extends = HoverParent)]
+    #[wasm_bindgen(extends = MarkdownSubView, extends = HoverParent, extends = View, extends = Component, extends = Events, extends = Object)]
     pub type MarkdownSourceView;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type MarkdownSubView;
 
-    #[wasm_bindgen(extends = EditableFileView)]
+    #[wasm_bindgen(extends = EditableFileView, extends = FileView, extends = View, extends = Component, extends = Events, extends = Object)]
     pub type MarkdownView;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen(extends = Component, extends = Object)]
     pub type Menu;
+
+    #[wasm_bindgen(extends = Object)]
+    pub type MenuItem;
+
+    #[wasm_bindgen(extends = Events, extends = Object)]
+    pub type MetadataCache;
 
     #[wasm_bindgen(extends = Object)]
     pub type Modal;
 
+    #[wasm_bindgen(extends = TextComponent, extends = AbstractTextComponent, extends = ValueComponent, extends = BaseComponent, extends = Object)]
+    pub type MomentFormatComponent;
+
     #[wasm_bindgen(extends = Object)]
     pub type Notice;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type OpenViewState;
 
-    #[wasm_bindgen(extends = Component, extends = Events)]
+    #[wasm_bindgen(extends = Component, extends = Events, extends = Object)]
     pub type Plugin;
 
     #[wasm_bindgen(extends = Object)]
@@ -177,7 +189,7 @@ extern "C" {
     #[wasm_bindgen(extends = Object)]
     pub type SplitDirection;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen]
     pub type SubpathResult;
 
     #[wasm_bindgen(extends = Object)]
@@ -192,22 +204,22 @@ extern "C" {
     #[wasm_bindgen(extends = AbstractTextComponent)]
     pub type TextComponent;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen(extends = TAbstractFile, extends = Object)]
     pub type TFile;
 
-    #[wasm_bindgen(extends = Object)]
+    #[wasm_bindgen(extends = TAbstractFile, extends = Object)]
     pub type TFolder;
 
-    #[wasm_bindgen(extends = BaseComponent)]
+    #[wasm_bindgen(extends = ValueComponent, extends = BaseComponent)]
     pub type ToggleComponent;
 
-    #[wasm_bindgen(extends = BaseComponent)]
+    #[wasm_bindgen(extends = BaseComponent, extends = Object)]
     pub type ValueComponent;
 
-    #[wasm_bindgen(extends = Component)]
+    #[wasm_bindgen(extends = Component, extends = Events, extends = Object)]
     pub type Vault;
 
-    #[wasm_bindgen(extends = Component)]
+    #[wasm_bindgen(extends = Component, extends = Events, extends = Object)]
     pub type View;
 
     #[wasm_bindgen(extends = Object)]
@@ -234,13 +246,13 @@ extern "C" {
     #[wasm_bindgen(extends = Object)]
     pub type WorkspaceRibbon;
 
-    #[wasm_bindgen(extends = WorkspaceSplit)]
+    #[wasm_bindgen(extends = WorkspaceSplit, extends = WorkspaceParent, extends = WorkspaceItem, extends = Object)]
     pub type WorkspaceSidedock;
 
-    #[wasm_bindgen(extends = WorkspaceParent)]
+    #[wasm_bindgen(extends = WorkspaceParent, extends = WorkspaceItem, extends = Object)]
     pub type WorkspaceSplit;
 
-    #[wasm_bindgen(extends = WorkspaceParent)]
+    #[wasm_bindgen(extends = WorkspaceParent, extends = WorkspaceItem, extends = Object)]
     pub type WorkspaceTabs;
 
     /* Loose Functions */
@@ -269,7 +281,20 @@ extern "C" {
     #[wasm_bindgen]
     pub fn setIcon(parent: &HtmlElement, iconId: &str, size: u32);
 
-    /* Methods */
+    #[wasm_bindgen]
+    pub fn parseFrontMatterAliases(frontmatter: &Object) -> Array;
+
+    #[wasm_bindgen]
+    pub fn parseFrontMatterEntry(frontmatter: &Object, key: &str);
+
+    #[wasm_bindgen]
+    pub fn parseFrontMatterStringArray(frontmatter: &Object, key: &str) -> Array;
+
+    #[wasm_bindgen]
+    pub fn parseFrontMatterTags(frontmatter: &Object) -> Array;
+
+    #[wasm_bindgen]
+    pub fn parseLinktext(linktext: &str);
 
     #[wasm_bindgen(method, js_class = "AbstractTextComponent", js_name = getValue)]
     pub fn AbstractTextComponent_getValue(this: &AbstractTextComponent) -> String;
@@ -434,6 +459,7 @@ extern "C" {
     #[wasm_bindgen(method, js_class = "ExtraButtonComponent", js_name = setIcon)]
     pub fn ExtraButtonComponent_setIcon(this: &ExtraButtonComponent, icon: &str);
 
+
     #[wasm_bindgen(js_namespace = FileSystemAdapter, js_name = readLocalFile)]
     pub fn FileSystemAdapter_readLocalFile(this: &ExtraButtonComponent, path: &str);
 
@@ -555,8 +581,95 @@ extern "C" {
     #[wasm_bindgen(method, js_class = "MarkdownView", js_name = showSearch)]
     pub fn MarkdownView_showSearch(this: &MarkdownView, replace: bool);
 
+
+    #[wasm_bindgen(method, js_class = "Menu", js_name = addItem)]
+    pub fn Menu_addItem(this: &Menu, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Menu", js_name = addSeparator)]
+    pub fn Menu_addSeparator(this: &Menu);
+
+    #[wasm_bindgen(method, js_class = "Menu", js_name = hide)]
+    pub fn Menu_hide(this: &Menu);
+
     #[wasm_bindgen(constructor, js_class = "Menu")]
     pub fn Menu_new() -> Menu;
+
+    #[wasm_bindgen(method, js_class = "Menu", js_name = setNoIcon)]
+    pub fn Menu_setNoIcon(this: &Menu);
+
+    #[wasm_bindgen(method, js_class = "Menu", js_name = showAtPosition)]
+    pub fn Menu_showAtPosition(this: &Menu, position: Point);
+
+
+    #[wasm_bindgen(constructor, js_class = "MenuItem")]
+    pub fn MenuItem_new(menu: &Menu) -> MenuItem;
+
+    #[wasm_bindgen(method, js_class = "MenuItem", js_name = onClick)]
+    pub fn MenuItem_onClick(this: &MenuItem, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "MenuItem", js_name = setActive)]
+    pub fn MenuItem_setActive(this: &MenuItem, active: bool);
+
+    #[wasm_bindgen(method, js_class = "MenuItem", js_name = setDisabled)]
+    pub fn MenuItem_setDisabled(this: &MenuItem, disabled: bool);
+
+    #[wasm_bindgen(method, js_class = "MenuItem", js_name = setTitle)]
+    pub fn MenuItem_setTitle(this: &MenuItem, title: &str);
+
+    #[wasm_bindgen(method, js_class = "MenuItem", js_name = setIcon)]
+    pub fn MenuItem_setIcon(this: &MenuItem, icon: &str, size: u32);
+
+    #[wasm_bindgen(method, js_class = "MenuItem", js_name = setIcon)]
+    pub fn MenuItem_setIcon_js(this: &MenuItem, icon: JsValue, size: u32);
+
+    #[wasm_bindgen(method, js_class = "MetadataCache", js_name = getFirstLinkpathDest)]
+    pub fn MetadataCache_getFirstLinkpathDest(this: &MetadataCache, linkpath: &str, sourcePath: &str) -> TFile;
+
+    #[wasm_bindgen(method, js_class = "MetadataCache", js_name = getFileCache)]
+    pub fn MetadataCache_getFileCache(this: &MetadataCache, file: &TFile) -> CachedMetadata;
+
+    #[wasm_bindgen(method, js_class = "MetadataCache", js_name = getCache)]
+    pub fn MetadataCache_getCache(this: &MetadataCache, path: &str);
+
+    #[wasm_bindgen(method, js_class = "MetadataCache", js_name = fileToLinktext)]
+    pub fn MetadataCache_fileToLinktext(this: &MetadataCache, file: &TFile, sourcePath: &str, omitMdExtension: bool) -> String;
+
+
+    #[wasm_bindgen(constructor, js_class = "Modal")]
+    pub fn Modal_new(app: &App) -> Modal;
+
+    #[wasm_bindgen(method, js_class = "Modal", js_name = onClose)]
+    pub fn Modal_onClose(this: &Modal);
+
+    #[wasm_bindgen(method, js_class = "Modal", js_name = onOpen)]
+    pub fn Modal_onOpen(this: &Modal);
+
+    #[wasm_bindgen(method, js_class = "Modal", js_name = open)]
+    pub fn Modal_open(this: &Modal);
+
+    #[wasm_bindgen(method, js_class = "Modal", js_name = close)]
+    pub fn Modal_close(this: &Modal);
+
+
+    #[wasm_bindgen(method, js_class = "MomentFormatComponent", js_name = setDefaultFormat)]
+    pub fn MomentFormatComponent_setDefaultFormat(this: &MomentFormatComponent, defaultFormat: &str);
+
+    #[wasm_bindgen(method, js_class = "MomentFormatComponent", js_name = setSampleEl)]
+    pub fn MomentFormatComponent_setSampleEl(this: &MomentFormatComponent, sampleEl: &HtmlElement);
+
+    #[wasm_bindgen(method, js_class = "MomentFormatComponent", js_name = setValue)]
+    pub fn MomentFormatComponent_setValue(this: &MomentFormatComponent, value: &str);
+
+    #[wasm_bindgen(method, js_class = "MomentFormatComponent", js_name = onChanged)]
+    pub fn MomentFormatComponent_onChanged(this: &MomentFormatComponent);
+
+    #[wasm_bindgen(method, js_class = "MomentFormatComponent", js_name = updateSample)]
+    pub fn MomentFormatComponent_updateSample(this: &MomentFormatComponent);
+
+
+    #[wasm_bindgen(constructor, js_class = "Notice")]
+    pub fn Notice_new() -> Notice;
+
 
     #[wasm_bindgen(method, js_class = "Plugin", js_name = addCommand)]
     pub fn Plugin_addCommand(this: &Plugin, command: &Command);
@@ -586,6 +699,68 @@ extern "C" {
     #[wasm_bindgen(method, js_class = "PluginSettingTab", js_name = load)]
     pub fn PluginSettingTab_load(this: &PluginSettingTab);
 
+    #[wasm_bindgen(constructor, js_class = "PluginSettingTab")]
+    pub fn PluginSettingTab_new() -> PluginSettingTab;
+
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addButton)]
+    pub fn Setting_addButton(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addDropdown)]
+    pub fn Setting_addDropdown(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addExtraButton)]
+    pub fn Setting_addExtraButton(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addMomentFormat)]
+    pub fn Setting_addMomentFormat(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addText)]
+    pub fn Setting_addText(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addTextArea)]
+    pub fn Setting_addTextArea(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addToggle)]
+    pub fn Setting_addToggle(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = addSlider)]
+    pub fn Setting_addSlider(this: &Setting, cb: &Function);
+
+    #[wasm_bindgen(constructor, js_class = "Setting")]
+    pub fn Setting_new(containerEl: &HtmlElement) -> Setting;
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = setClass)]
+    pub fn Setting_setClass(this: &Setting, cls: &str);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = setDesc)]
+    pub fn Setting_setDesc(this: &Setting, desc: &str);
+    #[wasm_bindgen(method, js_class = "Setting", js_name = setDesc)]
+    pub fn Setting_setDesc_fragment(this: &Setting, desc: &DocumentFragment);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = setHeading)]
+    pub fn Setting_setHeading(this: &Setting);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = setName)]
+    pub fn Setting_setName(this: &Setting, name: &str);
+
+    #[wasm_bindgen(method, js_class = "Setting", js_name = setTooltip)]
+    pub fn Setting_setTooltip(this: &Setting, tooltip: &str);
+
+    #[wasm_bindgen(method, js_class = "SettingTab", js_name = load)]
+    pub fn SettingTab_load(this: &SettingTab);
+
+    #[wasm_bindgen(method, js_class = "SettingTab", js_name = unload)]
+    pub fn SettingTab_unload(this: &SettingTab);
+
+    #[wasm_bindgen(method, js_class = "SettingTab", js_name = open)]
+    pub fn SettingTab_open(this: &SettingTab);
+
+    #[wasm_bindgen(method, js_class = "SettingTab", js_name = close)]
+    pub fn SettingTab_close(this: &SettingTab);
+
+    #[wasm_bindgen(method, js_class = "SettingTab", js_name = display)]
+    pub fn SettingTab_display(this: &SettingTab);
 
     #[wasm_bindgen(method, js_class = "Scope", js_name = registerKey)]
     pub fn Scope_registerKey(this: &Scope, modifiers: &Array, key: &str, func: &Function) -> Function;
@@ -594,8 +769,67 @@ extern "C" {
     pub fn Scope_unregister(this: &Scope, handler: &Function);
 
 
-    #[wasm_bindgen(method, js_class = "Vault", js_name = delete)]
-    pub fn Vault_delete(this: &Vault) -> Promise;
+    #[wasm_bindgen(method, js_class = "SliderComponent", js_name = getValue)]
+    pub fn SliderComponent_getValue(this: &SliderComponent) -> u32;
+
+    #[wasm_bindgen(method, js_class = "SliderComponent", js_name = getValuePretty)]
+    pub fn SliderComponent_getValuePretty(this: &SliderComponent) -> String;
+
+    #[wasm_bindgen(method, js_class = "SliderComponent", js_name = onChange)]
+    pub fn SliderComponent_onChange(this: &SliderComponent,cb: &Function);
+
+    #[wasm_bindgen(constructor, js_class = "SliderComponent")]
+    pub fn SliderComponent_new(containerEl: &HtmlElement) -> SliderComponent;
+
+    #[wasm_bindgen(method, js_class = "SliderComponent", js_name = setDynamicTooltip)]
+    pub fn SliderComponent_setDynamicTooltip(this: &SliderComponent);
+
+    #[wasm_bindgen(method, js_class = "SliderComponent", js_name = setLimits)]
+    pub fn SliderComponent_setLimits(this: &SliderComponent, min: u32, max: u32, step: u32);
+
+    #[wasm_bindgen(method, js_class = "SliderComponent", js_name = setValue)]
+    pub fn SliderComponent_setValue(this: &SliderComponent, value: u32);
+
+    #[wasm_bindgen(method, js_class = "SliderComponent", js_name = showTooltip)]
+    pub fn SliderComponent_showTooltip(this: &SliderComponent);
+
+
+    #[wasm_bindgen(constructor, js_class = "TextAreaComponent")]
+    pub fn TextAreaComponent_new(containerEl: &HtmlElement) -> TextAreaComponent;
+
+
+    #[wasm_bindgen(constructor, js_class = "TextComponent")]
+    pub fn TextComponent_new(containerEl: &HtmlElement) -> TextComponent;
+
+
+    #[wasm_bindgen(method, js_class = "ToggleComponent", js_name = getValue)]
+    pub fn ToggleComponent_getValue(this: &ToggleComponent) -> bool;
+
+    #[wasm_bindgen(constructor, js_class = "ToggleComponent")]
+    pub fn ToggleComponent_new(containerEl: &HtmlElement) -> ToggleComponent;
+
+    #[wasm_bindgen(method, js_class = "ToggleComponent", js_name = setValue)]
+    pub fn ToggleComponent_setValue(this: &ToggleComponent, on: bool);
+
+    #[wasm_bindgen(method, js_class = "ToggleComponent", js_name = onClick)]
+    pub fn ToggleComponent_onClick(this: &ToggleComponent);
+
+    #[wasm_bindgen(method, js_class = "ToggleComponent", js_name = onChange)]
+    pub fn ToggleComponent_onChange(this: &ToggleComponent, cb: &Function);
+
+
+    #[wasm_bindgen(method, js_class = "ValueComponent", js_name = getValue)]
+    pub fn ValueComponent_getValue(this: &ValueComponent) -> JsValue;
+
+    #[wasm_bindgen(constructor, js_class = "ValueComponent")]
+    pub fn ValueComponent_new(containerEl: &HtmlElement) -> ValueComponent;
+
+    #[wasm_bindgen(method, js_class = "ValueComponent", js_name = setValue)]
+    pub fn ValueComponent_setValue(this: &ValueComponent, value: JsValue);
+
+    #[wasm_bindgen(method, js_class = "ValueComponent", js_name = registerOptionListener)]
+    pub fn ValueComponent_registerOptionListener(this: &ValueComponent, listeners: &Object);
+
 
     #[wasm_bindgen(method, js_class = "Vault", js_name = cachedRead)]
     pub fn Vault_cachedRead(this: &Vault, file: &TFile) -> Promise;
@@ -611,6 +845,9 @@ extern "C" {
 
     #[wasm_bindgen(method, js_class = "Vault", js_name = createFolder)]
     pub fn Vault_createFolder(this: &Vault, path: &str) -> Promise;
+
+    #[wasm_bindgen(method, js_class = "Vault", js_name = delete)]
+    pub fn Vault_delete(this: &Vault) -> Promise;
 
     #[wasm_bindgen(method, js_class = "Vault", js_name = getAbstractFileByPath)]
     pub fn Vault_getAbstractFileByPath(this: &Vault, path: &str) -> TAbstractFile;
