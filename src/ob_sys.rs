@@ -375,14 +375,14 @@ extern "C" {
     #[wasm_bindgen(method, js_class = "DataAdapter", js_name = setCtime)]
     pub fn DataAdapter_setCtime(this: &DataAdapter, normalizedPath: &str, ctime: u32) -> Promise;
 
-    #[wasm_bindgen(method, js_class = "DataAdapter", js_name = setCtime)]
+    #[wasm_bindgen(method, js_class = "DataAdapter", js_name = setMtime)]
     pub fn DataAdapter_setMtime(this: &DataAdapter, normalizedPath: &str, mtime: u32) -> Promise;
 
     #[wasm_bindgen(method, js_class = "DataAdapter", js_name = trashLocal)]
     pub fn DataAdapter_trashLocal(this: &DataAdapter, normalizedPath: &str);
 
     #[wasm_bindgen(method, js_class = "DataAdapter", js_name = trashSystem)]
-    pub fn DataAdapter_trashSystem(this: &DataAdapter,normalizedPath: &str);
+    pub fn DataAdapter_trashSystem(this: &DataAdapter, normalizedPath: &str);
 
     #[wasm_bindgen(method, js_class = "DataAdapter", js_name = write)]
     pub fn DataAdapter_write(this: &DataAdapter, normalizedPath: &str, data: &str, immediate: &Function) -> Promise;
@@ -406,21 +406,20 @@ extern "C" {
     #[wasm_bindgen(method, js_class = "DropdownComponent", js_name = setValue)]
     pub fn DropdownComponent_setValue(this: &DropdownComponent, value: &str);
 
-
     #[wasm_bindgen(method, js_class = "Events", js_name = off)]
-    pub fn Events_off(name: &str, cb: &Function);
+    pub fn Events_off(this: &Events, name: &str, cb: &Function);
 
     #[wasm_bindgen(method, js_class = "Events", js_name = offRef)]
     pub fn Events_offRef(this: &Events, raef: &EventRef);
 
     #[wasm_bindgen(method, js_class = "Events", js_name = on)]
-    pub fn Events_on(name: &str, cb: &Function, ctx: &Object) -> EventRef;
+    pub fn Events_on(this: &Events, name: &str, cb: &Function, ctx: &Object) -> EventRef;
 
     #[wasm_bindgen(method, js_class = "Events", js_name = trigger)]
-    pub fn Events_trigger(this: &Events, name: &str, data: Array);
+    pub fn Events_trigger(this: &Events, name: &str, data: &Array);
 
     #[wasm_bindgen(method, js_class = "Events", js_name = tryTrigger)]
-    pub fn Events_tryTrigger(this: &Events, evt: &EventRef, args: Array);
+    pub fn Events_tryTrigger(this: &Events, evt: &EventRef, args: &Array);
 
 
     #[wasm_bindgen(constructor, js_class = "ExtraButtonComponent")]
@@ -433,14 +432,13 @@ extern "C" {
     pub fn ExtraButtonComponent_setTooltip(this: &ExtraButtonComponent, tooltip: &str);
 
     #[wasm_bindgen(method, js_class = "ExtraButtonComponent", js_name = setIcon)]
-    pub fn ExtraButtonComponent_setIcon(icon: &str);
+    pub fn ExtraButtonComponent_setIcon(this: &ExtraButtonComponent, icon: &str);
 
+    #[wasm_bindgen(js_namespace = FileSystemAdapter, js_name = readLocalFile)]
+    pub fn FileSystemAdapter_readLocalFile(this: &ExtraButtonComponent, path: &str);
 
-    #[wasm_bindgen(js_namespace = FileSystemDataAdapter)]
-    pub fn readLocalFile(this: &ExtraButtonComponent, path: &str);
-
-    #[wasm_bindgen(js_namespace = FileSystemDataAdapter)]
-    pub fn mkdir(this: &ExtraButtonComponent, path: &str);
+    #[wasm_bindgen(js_namespace = FileSystemAdapter, js_name = mkdir)]
+    pub fn FileSystemAdapter_mkdir(this: &ExtraButtonComponent, path: &str);
 
     #[wasm_bindgen(method, js_class = "FileSystemAdapter", js_name = getFullPath)]
     pub fn FileSystemAdapter_getFullPath(this: &FileSystemAdapter, normalizedPath: &str) -> String;
@@ -487,7 +485,79 @@ extern "C" {
     #[wasm_bindgen(js_namespace = MarkdownPreviewRenderer, js_name = unregisterPostProcessor)]
     pub fn MarkdownPreviewRenderer_unregisterPostProcessor(postProcessor: &MarkdownPostProcessor);
 
-    
+
+    #[wasm_bindgen(method, js_class = "MarkdownPreviewView", js_name = applyScroll)]
+    pub fn MarkdownPreviewView_applyScroll(this: &MarkdownPreviewView, scroll: i32);
+
+    #[wasm_bindgen(method, js_class = "MarkdownPreviewView", js_name = clear)]
+    pub fn MarkdownPreviewView_clear(this: &MarkdownPreviewView);
+
+    #[wasm_bindgen(method, js_class = "MarkdownPreviewView", js_name = get)]
+    pub fn MarkdownPreviewView_get(this: &MarkdownPreviewView);
+
+    #[wasm_bindgen(method, js_class = "MarkdownPreviewView", js_name = getScroll)]
+    pub fn MarkdownPreviewView_getScroll(this: &MarkdownPreviewView) -> i32;
+
+    #[wasm_bindgen(method, js_class = "MarkdownPreviewView", js_name = rerender)]
+    pub fn MarkdownPreviewView_rerender(this: &MarkdownPreviewView);
+
+    #[wasm_bindgen(method, js_class = "MarkdownPreviewView", js_name = set)]
+    pub fn MarkdownPreviewView_set(this: &MarkdownPreviewView, data: &str, clear: bool);
+
+
+    #[wasm_bindgen(method, js_class = "MarkdownSourceView", js_name = applyScroll)]
+    pub fn MarkdownSourceView_applyScroll(this: &MarkdownSourceView, scroll: i32);
+
+    #[wasm_bindgen(method, js_class = "MarkdownSourceView", js_name = clear)]
+    pub fn MarkdownSourceView_clear(this: &MarkdownSourceView);
+
+    #[wasm_bindgen(method, js_class = "MarkdownSourceView", js_name = get)]
+    pub fn MarkdownSourceView_get(this: &MarkdownSourceView);
+
+    #[wasm_bindgen(method, js_class = "MarkdownSourceView", js_name = getScroll)]
+    pub fn MarkdownSourceView_getScroll(this: &MarkdownSourceView) -> i32;
+
+    #[wasm_bindgen(method, js_class = "MarkdownSourceView", js_name = getSelection)]
+    pub fn MarkdownSourceView_getSelection(this: &MarkdownSourceView) -> String;
+
+    #[wasm_bindgen(constructor, js_class = "MarkdownSourceView")]
+    pub fn MarkdownSourceView_new() -> MarkdownSourceView;
+
+    #[wasm_bindgen(method, js_class = "MarkdownSourceView", js_name = rerender)]
+    pub fn MarkdownSourceView_rerender(this: &MarkdownSourceView);
+
+    #[wasm_bindgen(method, js_class = "MarkdownSourceView", js_name = set)]
+    pub fn MarkdownSourceView_set(this: &MarkdownSourceView, data: &str, clear: bool);
+
+
+    #[wasm_bindgen(method, js_class = "MarkdownSubView", js_name = applyScroll)]
+    pub fn MarkdownSubView_applyScroll(this: &MarkdownSubView, scroll: i32);
+
+    #[wasm_bindgen(method, js_class = "MarkdownSubView", js_name = get)]
+    pub fn MarkdownSubView_get(this: &MarkdownSubView);
+
+    #[wasm_bindgen(method, js_class = "MarkdownSubView", js_name = getScroll)]
+    pub fn MarkdownSubView_getScroll(this: &MarkdownSubView) -> i32;
+
+    #[wasm_bindgen(method, js_class = "MarkdownSubView", js_name = set)]
+    pub fn MarkdownSubView_set(this: &MarkdownSubView, data: &str, clear: bool);
+
+
+    #[wasm_bindgen(constructor, js_class = "MarkdownView")]
+    pub fn MarkdownView_new() -> MarkdownView;
+
+    #[wasm_bindgen(method, js_class = "MarkdownView", js_name = getMode)]
+    pub fn MarkdownView_getMode(this: &MarkdownView) -> String;
+
+    #[wasm_bindgen(method, js_class = "MarkdownView", js_name = getViewType)]
+    pub fn MarkdownView_getViewType(this: &MarkdownView) -> String;
+
+    #[wasm_bindgen(method, js_class = "MarkdownView", js_name = showSearch)]
+    pub fn MarkdownView_showSearch(this: &MarkdownView, replace: bool);
+
+    #[wasm_bindgen(constructor, js_class = "Menu")]
+    pub fn Menu_new() -> Menu;
+
     #[wasm_bindgen(method, js_class = "Plugin", js_name = addCommand)]
     pub fn Plugin_addCommand(this: &Plugin, command: &Command);
 
