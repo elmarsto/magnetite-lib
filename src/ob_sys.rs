@@ -33,16 +33,16 @@ extern "C" {
     #[wasm_bindgen(extends = Object)]
     pub type Command;
 
-    #[wasm_bindgen(js_name = Component, extends = Events)]
+    #[wasm_bindgen(js_name = Component, extends = Events, extends = Object)]
     pub type Component;
 
     #[wasm_bindgen]
     pub type DataAdapter;
 
-    #[wasm_bindgen(extends = ValueComponent)]
+    #[wasm_bindgen(extends = ValueComponent, extends = BaseComponent)]
     pub type DropdownComponent;
 
-    #[wasm_bindgen(extends = FileView)]
+    #[wasm_bindgen(extends = FileView, extends = ItemView, extends = View, extends = Component, extends = Events, extends = Object)]
     pub type EditableFileView;
 
     #[wasm_bindgen(extends = ReferenceCache)]
@@ -129,7 +129,7 @@ extern "C" {
     #[wasm_bindgen(extends = EditableFileView, extends = FileView, extends = View, extends = Component, extends = Events, extends = Object)]
     pub type MarkdownView;
 
-    #[wasm_bindgen(extends = Component, extends = Object)]
+    #[wasm_bindgen(extends = Component, extends = Events, extends = Object)]
     pub type Menu;
 
     #[wasm_bindgen(extends = Object)]
@@ -183,7 +183,7 @@ extern "C" {
     #[wasm_bindgen(extends = Object)]
     pub type SettingTab;
 
-    #[wasm_bindgen(extends = ValueComponent)]
+    #[wasm_bindgen(extends = ValueComponent, extends = BaseComponent, extends = Object)]
     pub type SliderComponent;
 
     #[wasm_bindgen(extends = Object)]
@@ -198,10 +198,10 @@ extern "C" {
     #[wasm_bindgen(extends = Object)]
     pub type TAbstractFile;
 
-    #[wasm_bindgen(extends = AbstractTextComponent)]
+    #[wasm_bindgen(extends = AbstractTextComponent, extends = ValueComponent, extends = BaseComponent, extends = Object)]
     pub type TextAreaComponent;
 
-    #[wasm_bindgen(extends = AbstractTextComponent)]
+    #[wasm_bindgen(extends = AbstractTextComponent, extends = ValueComponent, extends = BaseComponent, extends = Object)]
     pub type TextComponent;
 
     #[wasm_bindgen(extends = TAbstractFile, extends = Object)]
@@ -210,7 +210,7 @@ extern "C" {
     #[wasm_bindgen(extends = TAbstractFile, extends = Object)]
     pub type TFolder;
 
-    #[wasm_bindgen(extends = ValueComponent, extends = BaseComponent)]
+    #[wasm_bindgen(extends = ValueComponent, extends = BaseComponent, extends = Object)]
     pub type ToggleComponent;
 
     #[wasm_bindgen(extends = BaseComponent, extends = Object)]
@@ -231,16 +231,16 @@ extern "C" {
     #[wasm_bindgen(extends = Object)]
     pub type ViewStateResult;
 
-    #[wasm_bindgen(extends = Events)]
+    #[wasm_bindgen(extends = Events, extends = Object)]
     pub type Workspace;
 
     #[wasm_bindgen(extends = Object)]
     pub type WorkspaceItem;
 
-    #[wasm_bindgen(extends = WorkspaceItem)]
+    #[wasm_bindgen(extends = WorkspaceItem, extends = Object)]
     pub type WorkspaceLeaf;
 
-    #[wasm_bindgen(extends = WorkspaceItem)]
+    #[wasm_bindgen(extends = WorkspaceItem, extends = Object)]
     pub type WorkspaceParent;
 
     #[wasm_bindgen(extends = Object)]
